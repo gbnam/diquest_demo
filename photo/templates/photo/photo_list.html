@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}photo_list.html{% endblock %}
+
+{% block content %}
+
+    <h1>Photo List</h1>
+
+    <hr style="margin:0 0 20px 0;" />
+
+    <div class="row">
+        {% for photo in object_list %}
+        <div class="col-md-2">
+            <div class="thumbnail">
+                <a href="{{ photo.get_absolute_url }}">
+                <img src="{{ photo.image.thumb_url }}" style="width:100%">
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

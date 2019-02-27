@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}support_detail.html{% endblock %}
+
+{% block content %}
+
+    <h2>{{ object.title }}</h2>
+
+    <p class="other_supports">
+        {% if object.get_previous_by_modify_date %}
+        <a href="{{ object.get_previous_support.get_absolute_url }}" title="View previous support">&laquo;--{{ object.get_previous_support }}</a>
+        {% endif %}
+
+        {% if object.get_next_by_modify_date %}
+        | <a href="{{ object.get_next_support.get_absolute_url }}" title="View next support">{{ object.get_next_support }}--&raquo;</a>
+        {% endif %}
+    </p>
+
+    <p class="date">{{ object.modify_date|date:"j F Y" }}</p>
+    <br/>
+
+    <div class="body">
+        {{ object.content|linebreaks }}
+    </div>
+
+    <div>
+        <b>TAGS: </b>
+        {% load tagging_tags %}
+        {% tags_for_object object as tags %}
+        {% for tag in tags %}
+        <a href="{% url 'support:tagged_object_list' tag.name %}">{{tag.name}}</a>
+        {% endfor %}
+        <a href="{% url 'support:tag_cloud' %}"><i>[ TagCloud ]</i></a>
+    </div>
+
+    <br/>
+    <div>
+        {% load disqus_tags %}
+        {% disqus_show_comments %}
+    </div>
+
+{% endblock %}

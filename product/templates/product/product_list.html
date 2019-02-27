@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Django Product List{% endblock %}
+
+{% block content %}
+
+    <h1>Product List</h1>
+
+    <ul>
+        {% for product in object_list %}
+            <li><a href="{% url 'product:detail' product.id %}">{{ product }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
