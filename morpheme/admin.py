@@ -1,5 +1,10 @@
 from django.contrib import admin
 
-from .models import Question
+from .models import Morpheme
 
-admin.site.register(Question)
+
+class MorphemeAdmin(admin.ModelAdmin):
+    list_display = ('sentence', 'title')
+
+
+admin.site.register(Morpheme, MorphemeAdmin)
