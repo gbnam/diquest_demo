@@ -1,38 +1,58 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from .models import Question, Choice
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.views.generic import ListView, FormView
+from konlpy.tag import Okt
+from .forms import SentenceForm
 
+"""
+1. template에 context를 채워넣어 표현한 결과를 HttpResponse 객체와 함께
+돌려주는 구문은 자주 쓰는 용법이나 Django는 이런 표현을 쉽게 표현할 수 있도록
+단축 기능(shortcuts)을 제공한다.
 
 def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'morpheme/index.html', context)
+    template = loader.get_template('morpheme/morpheme_list.html')
+    context = {
+        'searchTerm': 'Hello, world. You\'re at the polls index.'
+    }
+  
+    return HttpResponse(template.render(context, request))
+"""
+
+"""
+2. shortcuts(지름길) 
+render() 함수는 request 객체를 첫번째, template 이름을 두번째, context dict 객체를 세번째
+선택적 인수로 받는다. 인수로 지정된 context로 표현된 template의 HttpResponse 객체가 반환
+"""
 
 
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
+class MainFormView(FormView):
+    form_class = SentenceForm
+    template_name = 'morpheme/morpheme_list.html'
+
+    def form_valid(self, form):
+        sentence = '%s' % self.request.POST['raw_sentence']
+
+        print(sentence)
+        context = {}
+        context['form'] = form
+        context['sentence'] = sentence
+        context['result_sentence'] = sentence
+
+        return render(self.request, self.template_name, context)
 
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'morpheme/results.html', {'question': question})
+# --- Bootstrap Search Result
+class SentenceAnalyzeLV(ListView):
+    template_name = 'morpheme/morpheme_list.html'
 
+    def get(self, request):
+        okt = Okt()
+        sentence = '%s' % self.request.GET['raw_sentence']
+        result = okt.pos(sentence)
 
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'morpheme/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('morpheme:results', args=(question.id,)))
+        return JsonResponse({
+            'sentence': result
+        }, json_dumps_params={'ensure_ascii': True})
+
+    def get_data(self):
+        pass
