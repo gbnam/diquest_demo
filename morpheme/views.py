@@ -54,7 +54,6 @@ class SentenceAnalyzeLV(ListView):
 
     @staticmethod
     def get_data(morpheme_type, result_sentence):
-        print("XXX")
         return {
             'result_sentence': result_sentence
             , 'morpheme_type': morpheme_type
