@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'support.apps.SupportConfig',
     'photo.apps.PhotoConfig',
-    'morpheme.apps.MorphemeConfig'
+    'morpheme.apps.MorphemeConfig',
+    'ml.apps.MlConfig',
 ]
 
 MIDDLEWARE = [

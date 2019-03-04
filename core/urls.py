@@ -35,5 +35,6 @@ urlpatterns = [
     path('support/', include('support.urls')),
     path('photo/', include('photo.urls')),
     path('morpheme/', include('morpheme.urls')),
+    path('ml/', include('ml.urls')),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

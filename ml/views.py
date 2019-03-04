@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 
-# Create your views here.
+
+class MLIndexLV(ListView):
+    template_name = 'ml/ml_list.html'
+
+    def get_queryset(self):
+        pass
