@@ -1,0 +1,65 @@
+{#{% extends "base.html" %}#}
+{% load staticfiles widget_tweaks %}
+
+
+{% block content %}
+
+{#    <h1>문장별 실시간 형태소 분석 - {{user}}</h1>#}
+{#    <p class="text-muted">아래 입력창에서 형태소 분석엔진을 선택하고 문장을 입력해주세요.</p>#}
+
+    <form id="sentence_form" class="form-horizontal" action="." method="post">{% csrf_token %}
+
+        <fieldset style="border:1px solid #ccc; padding:20px 0 0 0;">
+            <div class="form-group">
+                <label for="id_morpheme_type" class="col-sm-3 control-label">{{ form.morpheme_type.label}}</label>
+                <div class="col-sm-8">
+                    {{ form.morpheme_type|add_class:"form-control"}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_raw_sentence" class="col-sm-3 control-label">{{ form.raw_sentence.label}}</label>
+
+                <div class="col-sm-8">
+                    <div class="input-group">
+                    {{ form.raw_sentence|add_class:"form-control"}}
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_parsed_sentence" class="col-sm-3 control-label">{{ form.parsed_sentence.label }}</label>
+                <div class="col-sm-8">
+{#                    {{ form.parsed_sentence|add_class:"form-control" }}#}
+                    <input type="text" name="result_sentence" readonly="readonly" maxlength="300" class="form-control" required="" id="id_result_sentence" >
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-10 col-sm-12">
+                    <input type="submit" value="Submit" class="btn btn-info"/>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        {#document.getElementById('id_title').focus();#}
+        function sentence_analyze(){
+            $.ajax({
+               url : "/morpheme/sentence/"
+               , type : "GET"
+                , data : $("#sentence_form").serialize()
+                , success : function(json) {
+                   console.log('json > ', JSON.stringify(json.sentence));
+                    $("#id_result_sentence").val(JSON.stringify(json.sentence));
+                }, error : function(xhr, errmsg, err){
+                   console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+
+        }
+    </script>
+
+{% endblock %}
