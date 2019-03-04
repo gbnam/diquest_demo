@@ -10,6 +10,4 @@ urlpatterns = [
     path('', MainFormView.as_view(), name='index'),
 
     path('sentence/', SentenceAnalyzeLV.as_view(), name='get'),
-# Example: /search/
-#     path('', views.parse_morpheme, name='parse'),
 ]

@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% load staticfiles widget_tweaks %}
 
-</body>
-</html>
+
+{% block content %}
+    {% if form.is_multipart %}
+        <form class="form-horizontal" enctype="multipart/form-data" method="post" action=".">
+    {% else %}
+        <form class="form-horizontal" method="post" action=".">
+    {% endif %}
+{% csrf_token %}
+
+<fieldset style="border:1px solid #ccc; padding:20px 0 0 0;">
+
+    <div class="form-group">
+        <label for="id_image" class="col-sm-2 control-label">{{ form.image.label }}</label>
+        <div class="col-sm-6">
+            {{ form.image|add_class:"form-control" }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="id_title" class="col-sm-2 control-label">{{ form.title.label }}</label>
+        <div class="col-sm-6">
+            {{ form.title|add_class:"form-control" }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="id_description" class="col-sm-2 control-label">{{ form.description.label }}</label>
+        <div class="col-sm-6">
+            {{ form.description|add_class:"form-control" }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-6">
+            <input type="submit" value="Submit" class="btn btn-info"/>
+        </div>
+    </div>
+
+</fieldset>
+
+</form>
+{% endblock %}

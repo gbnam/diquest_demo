@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, FormView
-from konlpy.tag import Okt
+from .models import Morpheme
 from .forms import SentenceForm
 
 """
@@ -31,8 +31,6 @@ class MainFormView(FormView):
 
     def form_valid(self, form):
         sentence = '%s' % self.request.POST['raw_sentence']
-
-        print(sentence)
         context = {}
         context['form'] = form
         context['sentence'] = sentence
@@ -46,13 +44,17 @@ class SentenceAnalyzeLV(ListView):
     template_name = 'morpheme/morpheme_list.html'
 
     def get(self, request):
-        okt = Okt()
+        morpheme_type = '%s' % self.request.GET['morpheme_type']
         sentence = '%s' % self.request.GET['raw_sentence']
-        result = okt.pos(sentence)
 
-        return JsonResponse({
-            'sentence': result
-        }, json_dumps_params={'ensure_ascii': True})
+        morpheme_object = Morpheme.morpheme_init(morpheme_type)
+        result_sentence = morpheme_object.pos(sentence)
 
-    def get_data(self):
-        pass
+        return JsonResponse(self.get_data(morpheme_type, result_sentence), json_dumps_params={'ensure_ascii': True})
+
+    @staticmethod
+    def get_data(morpheme_type, result_sentence):
+        return {
+            'result_sentence': result_sentence
+            , 'morpheme_type': morpheme_type
+        }
