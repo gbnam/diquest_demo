@@ -22,7 +22,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         {{ form.raw_sentence|add_class:"form-control" }}
-                        <span class="input-group-addon" id="id_search_icon"><i
+                        <span class="input-group-addon"><i
                                 class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </div>
@@ -40,15 +40,21 @@
     <script type="text/javascript">
         {#document.getElementById('id_title').focus();#}
 
-        $(document).ready(function () {
-            $("#id_raw_sentence").keypress(function (event) {
-                if (event.keyCode == '13') {
-                    sentence_analyze();
-                } else {
-                    return false;
-                }
-            });
+        var sentence_obj = document.getElementById("id_raw_sentence");
 
+        document.addEventListener('keydown', function (event) {
+            var lastDownTarget = event.target;
+            if (lastDownTarget == sentence_obj) {
+                if(event.keyCode=='13') {
+
+                    console.log(lastDownTarget);
+
+                    sentence_analyze();
+                }
+            }
+        }, false);
+
+        $(document).ready(function () {
             $("#id_search_icon").click(function (event) {
                 if (event.type == 'click') {
                     sentence_analyze();
