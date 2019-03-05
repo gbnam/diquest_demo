@@ -1,3 +1,8 @@
-from django.test import TestCase
+sentence = ['안녕하세요', '저는 김호근입니다', '반갑습니다']
+keyword = ['안녕', '저는', '김호근']
 
-# Create your tests here.
+print(sentence)
+print(keyword)
+
+for x in sentence:
+    print(x)
