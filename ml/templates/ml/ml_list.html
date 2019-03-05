@@ -1,3 +1,56 @@
 {% extends "base.html" %}
 
 {% block title %}ml_list.html{% endblock %}
+
+{% block content %}
+
+    <h1>TextRank</h1>
+    <div class="row" style="border: 3px solid gray; padding: 20px 20px;">
+
+        <div class="col-md-5 col-sm-5 col-xs-5">
+            <div class="panel panel-info">
+                <div class="panel-heading">원문 텍스트</div>
+                <div class="panel-body">
+                    <textarea class="form-control" aria-label="originalText" placeholder="원문 텍스트를 입력하세요" style="height: 417px"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-sm-2 col-xs-2" style="height: 510px; line-height: 510px; text-align: center;">
+            <button class="btn btn-default" type="button" style="vertical-align: middle; margin: 0 auto;">요약</button>
+        </div>
+
+        <div class="col-md-5 col-sm-5 col-xs-5">
+            <div class="panel panel-info" style="height: 235px;">
+                <div class="panel-heading">요약 문장</div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="sentence1" style="margin-bottom: 15px">
+                                <input type="text" class="form-control" id="sentence2" style="margin-bottom: 15px">
+                                <input type="text" class="form-control" id="sentence3" style="margin-bottom: 15px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-info" style="height: 235px;">
+                <div class="panel-heading">요약 키워드</div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="sentence1" style="margin-bottom: 15px">
+                                <input type="text" class="form-control" id="sentence2" style="margin-bottom: 15px">
+                                <input type="text" class="form-control" id="sentence3" style="margin-bottom: 15px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
