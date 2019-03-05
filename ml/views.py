@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 
 
+
 class MLIndexLV(ListView):
     template_name = 'ml/ml_list.html'
 
@@ -18,7 +19,7 @@ def textrank(request):
     keyword = ['안녕', '저는', '김호근']
     print(sentence, keyword)
     result = {
-        'sentence' : sentence,
-        'keyword' : keyword,
+        'sentence': sentence,
+        'keyword': keyword,
     }
     return HttpResponse(json.dumps(result), 'application/json')
