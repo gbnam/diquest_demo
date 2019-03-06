@@ -60,6 +60,7 @@ class Sentence:
         self.index = index
         self.text = text
         # _stopwords(금지어)에 있는 명사제외하고 꼬꼬마에서 명사추출
+        # 해당부분에서 kkma 명사추출시 에러발생(에러로그없이 서버 내려감)
         # self.nouns = [noun for noun in _kkma.nouns(self.text) if noun not in _stopwords]
         self.nouns = [noun for noun in _twt.nouns(self.text) if noun not in _stopwords]
         # 추출한 명사들 key:value형식으로 명사:명사가나온수로 count
