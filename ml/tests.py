@@ -1,8 +1,14 @@
-sentence = ['안녕하세요', '저는 김호근입니다', '반갑습니다']
-keyword = ['안녕', '저는', '김호근']
+from konlpy.tag import Kkma, Twitter
 
-print(sentence)
-print(keyword)
+# sentence = ['안녕하세요', '저는 김호근입니다', '반갑습니다']
+# keyword = ['안녕', '저는', '김호근']
+# print(sentence)
+# print(keyword)
 
-for x in sentence:
-    print(x)
+_kkma = Kkma()
+_twt = Twitter()
+text = "안녕하세요 저는 김호근 입니다."
+
+print(text)
+print(_kkma.nouns(text))
+print(_twt.nouns(text))

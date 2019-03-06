@@ -29,3 +29,4 @@ pip install numpy
 pip install pandas
 
 pip install networkx
+pip install tensorflow

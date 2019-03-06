@@ -100,6 +100,13 @@
                     dataType: 'json',
                     success: function(result) {
                         console.log("success result: ", result);
+                        console.log("sentence1: ", result.sentence[0]);
+                        for(var i=0; i<result.sentence.length; i++){
+                            $("#sentence" + (i+1)).val(result.sentence[i]);
+                        }
+                        for(var i=0; i<result.keyword.length; i++) {
+                            $("#keyword" + (i+1)).val(result.keyword[i]);
+                        }
                     },
                     error: function(error) {
                         console.log("error: ", error);
