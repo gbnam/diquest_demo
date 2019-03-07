@@ -7,11 +7,11 @@ import itertools
 import networkx
 import collections
 
-from konlpy.tag import Kkma
-from konlpy.tag import Twitter
+# from konlpy.tag import Kkma
+from konlpy.tag import Okt
 
 # _kkma = Kkma()
-_twt = Twitter()
+_twt = Okt()
 _stopwords = []
 
 
