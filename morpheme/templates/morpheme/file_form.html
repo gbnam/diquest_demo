@@ -3,7 +3,8 @@
 
 {% block content %}
     {% if form.is_multipart %}
-        <form class="form-horizontal" enctype="multipart/form-data" method="post" action=".">
+        <form class="form-horizontal" id="file_form" enctype="multipart/form-data" method="post" action="."
+              onsubmit="return false">
     {% else %}
         <form class="form-horizontal" method="post" action=".">
     {% endif %}
@@ -12,33 +13,106 @@
 <fieldset style="border:1px solid #ccc; padding:20px 0 0 0;">
 
     <div class="form-group">
-        <label for="id_image" class="col-sm-2 control-label">{{ form.image.label }}</label>
-        <div class="col-sm-6">
-            {{ form.image|add_class:"form-control" }}
+        <label for="id_file_morpheme_type" class="col-sm-3 control-label">{{ form.file_morpheme_type.label }}</label>
+        <div class="col-sm-8">
+            {{ form.file_morpheme_type|add_class:"form-control" }}
         </div>
     </div>
 
     <div class="form-group">
-        <label for="id_title" class="col-sm-2 control-label">{{ form.title.label }}</label>
-        <div class="col-sm-6">
-            {{ form.title|add_class:"form-control" }}
+        <label for="id_csv_file" class="col-sm-3 control-label">{{ form.file.label }}</label>
+        <div class="col-sm-8">
+            {{ form.file|add_class:"form-control" }}
+            {#            <input type="file" name="file" id="csv_file"/>#}
+
         </div>
     </div>
 
     <div class="form-group">
-        <label for="id_description" class="col-sm-2 control-label">{{ form.description.label }}</label>
-        <div class="col-sm-6">
-            {{ form.description|add_class:"form-control" }}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-6">
+        <div class="col-sm-offset-10 col-sm-4">
             <input type="submit" value="Submit" class="btn btn-info"/>
         </div>
     </div>
 
+    <div class="form-group">
+        <label for="id_csv_file" class="col-sm-1 control-label"></label>
+        <div class="col-sm-10" style="width:90%">
+            <div class="alert alert-info" id="file_result_info" style="overflow:auto !important"></div>
+        </div>
+    </div>
 </fieldset>
 
 </form>
+
+<script type="text/javascript">
+    {#document.getElementById('id_title').focus();#}
+    $(document).ready(function () {
+
+        $('input[type="submit"]').on("click", function () {
+            file_analyze();
+        });
+    });
+
+    function file_analyze() {
+        $("#id_file_morpheme_type").attr('required', 'required');
+        $("#id_csv_file").attr('required', 'required');
+
+        {#$('.btn-upload').on('click', function (){#}
+
+        if (confirm('Want to upload a image or a video file?')) {
+            var data = new FormData();
+
+            data.append("file_morpheme_type", $('#id_file_morpheme_type').val());
+            data.append("csv_file", $('#id_file')[0].files[0]);
+            data.append("csrfmiddlewaretoken", $("input[name='csrfmiddlewaretoken']").val());
+
+            for (var key of data.entries()) {
+                console.log(key[0] + ', ' + key[1]);
+            }
+            if ($("#id_file") != null && $('#id_file_morpheme_type').val() != '') {
+                $.ajax({
+                    url: "/morpheme/morpheme_file/"
+                    , enctype: 'multipart/form-data'
+                    , type: 'post'
+                    , contentType: false
+                    , processData: false
+                    , data: data
+                    , beforeSend: function () {
+                        $('.load_spinner_class').css('width', '100%').css('height', '100vh').css('background-color', 'black').css('opacity', '0.2').css('z-index', '0');
+                        $('.load_spinner_class *').prop('disabled', true);
+                    }
+                    , success: function (json) {
+                        console.log(json.morpheme_list);
+                        var morpheme_type_str = JSON.stringify(json.file_morpheme_type);
+
+                        $("#file_result_info").html('<p><strong>' + morpheme_type_str + ' 분석결과 </strong></p>');
+                        for (var i = 0; i < json.morpheme_list.length; i++) {
+                            var doc_number = json.morpheme_list[i][0];
+                            var speaker_type = json.morpheme_list[i][1];
+                            var sentence_list = json.morpheme_list[i][2];
+                            var sentence = ''
+                            for (var j = 0; j < sentence_list.length; j++) {
+                                sentence += sentence_list[j] + ' ';
+                            }
+                            $("#file_result_info").append('<p>[' + doc_number + ']번째 문장 : ' + '화자 : ' + speaker_type + ', ' + sentence + '</p>');
+                        }
+                    }
+                    ,
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                    ,
+                    complete: function () {
+                        $('.load_spinner_class').css('width', '100%').css('height', '100vh').css('background-color', '').css('opacity', '1').css('z-index', '0');
+                        $('.load_spinner_class *').prop('disabled', false);
+                    }
+                });
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+</script>
 {% endblock %}

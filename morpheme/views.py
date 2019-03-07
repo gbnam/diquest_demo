@@ -1,8 +1,10 @@
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, FormView
+import pandas
+from .forms import MorphemeForm
 from .models import Morpheme
-from .forms import SentenceForm
+import io
 
 """
 1. template에 context를 채워넣어 표현한 결과를 HttpResponse 객체와 함께
@@ -26,15 +28,13 @@ render() 함수는 request 객체를 첫번째, template 이름을 두번째, co
 
 
 class MainFormView(FormView):
-    form_class = SentenceForm
+    form_class = MorphemeForm
     template_name = 'morpheme/morpheme_list.html'
 
     def form_valid(self, form):
-        sentence = '%s' % self.request.POST['raw_sentence']
+        form.save()
         context = {}
         context['form'] = form
-        context['sentence'] = sentence
-        context['result_sentence'] = sentence
 
         return render(self.request, self.template_name, context)
 
@@ -57,4 +57,25 @@ class SentenceAnalyzeLV(ListView):
         return {
             'result_sentence': result_sentence
             , 'morpheme_type': morpheme_type
+        }
+
+
+class FileAnalyzeLV(ListView):
+    template_name = 'morpheme/morpheme_list.html'
+
+    def post(self, request):
+        file_morpheme_type = '%s' % self.request.POST.get('file_morpheme_type')
+        filename = request.FILES['csv_file'].read()
+
+        data_frame = pandas.read_csv(io.BytesIO(filename))
+        morpheme_object = Morpheme.morpheme_init(file_morpheme_type)
+        morpheme_list = Morpheme.pos_list(morpheme_object, data_frame)
+        del morpheme_object
+        return JsonResponse(self.get_data(file_morpheme_type, morpheme_list))
+
+    @staticmethod
+    def get_data(file_morpheme_type, morpheme_list):
+        return {
+            'file_morpheme_type': file_morpheme_type
+            , 'morpheme_list': list(morpheme_list)
         }

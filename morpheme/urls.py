@@ -10,4 +10,6 @@ urlpatterns = [
     path('', MainFormView.as_view(), name='index'),
 
     path('sentence/', SentenceAnalyzeLV.as_view(), name='get'),
+
+    path('morpheme_file/', FileAnalyzeLV.as_view(), name='file_add'),
 ]
