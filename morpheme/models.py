@@ -62,8 +62,8 @@ class Morpheme(models.Model):
         elif morpheme_type == 'kkma':
             morpheme_object = Kkma()
         elif morpheme_type == 'jiana':
-            morpheme_object = Jiana()
-            # morpheme_object = Okt()
+            # morpheme_object = Jiana()
+            morpheme_object = Okt()
         print(morpheme_object)
         return morpheme_object
 
