@@ -13,9 +13,9 @@
 <fieldset style="border:1px solid #ccc; padding:20px 0 0 0;">
 
     <div class="form-group">
-        <label for="id_file_morpheme_type" class="col-sm-3 control-label">{{ form.file_morpheme_type.label }}</label>
+        <label for="id_file_morpheme_type" class="col-sm-3 control-label">{{ form.morpheme_type.label }}</label>
         <div class="col-sm-8">
-            {{ form.file_morpheme_type|add_class:"form-control" }}
+            {{ form.morpheme_type|add_class:"form-control" }}
         </div>
     </div>
 
@@ -23,8 +23,6 @@
         <label for="id_csv_file" class="col-sm-3 control-label">{{ form.file.label }}</label>
         <div class="col-sm-8">
             {{ form.file|add_class:"form-control" }}
-            {#            <input type="file" name="file" id="csv_file"/>#}
-
         </div>
     </div>
 
@@ -41,34 +39,38 @@
         </div>
     </div>
 </fieldset>
-
 </form>
 
 <script type="text/javascript">
-    {#document.getElementById('id_title').focus();#}
     $(document).ready(function () {
-
         $('input[type="submit"]').on("click", function () {
             file_analyze();
         });
     });
 
+    function build_form_data() {
+        let form_data = new FormData();
+        let morpheme_type = document.getElementsByName("morpheme_type")[1].value;
+        let csv_file = $('#id_file')[0].files[0];
+        let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
+
+        form_data.append("morpheme_type", morpheme_type);
+        form_data.append("csv_file", csv_file);
+        form_data.append("csrfmiddlewaretoken", csrftoken);
+        return form_data
+    }
+
     function file_analyze() {
-        $("#id_file_morpheme_type").attr('required', 'required');
-        $("#id_csv_file").attr('required', 'required');
+        if (confirm('파일을 업로드하시겠습니까?')) {
 
-        {#$('.btn-upload').on('click', function (){#}
-
-        if (confirm('Want to upload a image or a video file?')) {
-            var data = new FormData();
-
-            data.append("file_morpheme_type", $('#id_file_morpheme_type').val());
-            data.append("csv_file", $('#id_file')[0].files[0]);
-            data.append("csrfmiddlewaretoken", $("input[name='csrfmiddlewaretoken']").val());
-
-            for (var key of data.entries()) {
-                console.log(key[0] + ', ' + key[1]);
+            /* 1. set form_data */
+            let form_data = build_form_data();
+            for (let key of form_data.entries()) {
+                if (key[1] == 'undefined' || key[1] == '') {
+                    return false;
+                }
             }
+
             if ($("#id_file") != null && $('#id_file_morpheme_type').val() != '') {
                 $.ajax({
                     url: "/morpheme/morpheme_file/"
@@ -76,9 +78,9 @@
                     , type: 'post'
                     , contentType: false
                     , processData: false
-                    , data: data
+                    , data: form_data
                     , beforeSend: function () {
-                        $('.load_spinner_class').css('width', '100%').css('height', '100vh').css('background-color', 'black').css('opacity', '0.2').css('z-index', '0');
+                        $('.load_spinner_class').css('width', '100%').css('height', '100%').css('background-color', 'black').css('opacity', '0.2').css('z-index', '0');
                         $('.load_spinner_class *').prop('disabled', true);
                     }
                     , success: function (json) {
@@ -103,7 +105,7 @@
                     }
                     ,
                     complete: function () {
-                        $('.load_spinner_class').css('width', '100%').css('height', '100vh').css('background-color', '').css('opacity', '1').css('z-index', '0');
+                        $('.load_spinner_class').css('width', '100%').css('height', '100%').css('background-color', '').css('opacity', '1').css('z-index', '0');
                         $('.load_spinner_class *').prop('disabled', false);
                     }
                 });

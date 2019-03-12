@@ -1,42 +1,35 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.views.generic import ListView, FormView
-import pandas
-from .forms import MorphemeForm
-from .models import Morpheme
+import gc
 import io
+import os
+import time
 
-"""
-1. template에 context를 채워넣어 표현한 결과를 HttpResponse 객체와 함께
-돌려주는 구문은 자주 쓰는 용법이나 Django는 이런 표현을 쉽게 표현할 수 있도록
-단축 기능(shortcuts)을 제공한다.
+import jpype
+import pandas
+import psutil
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 
-def index(request):
-    template = loader.get_template('morpheme/morpheme_list.html')
-    context = {
-        'searchTerm': 'Hello, world. You\'re at the polls index.'
-    }
-  
-    return HttpResponse(template.render(context, request))
-"""
-
-"""
-2. shortcuts(지름길) 
-render() 함수는 request 객체를 첫번째, template 이름을 두번째, context dict 객체를 세번째
-선택적 인수로 받는다. 인수로 지정된 context로 표현된 template의 HttpResponse 객체가 반환
-"""
+from .forms import MorphemeAnalysisForm
+from .models import Morpheme
 
 
-class MainFormView(FormView):
-    form_class = MorphemeForm
+class MorphemeMainCreateView(LoginRequiredMixin, CreateView):
     template_name = 'morpheme/morpheme_list.html'
+    # model = MorphemeAnalysisModel
+    form_class = MorphemeAnalysisForm
+    # fields = ['raw_sentence', 'slug', 'morpheme_type', 'file']
+    initial = {'slug': 'auto-filling-do-not-input'}
+    success_url = reverse_lazy('morpheme:morpheme_index')
+
+    def form_invalid(self, form):
+        return super(MorphemeMainCreateView, self).form_invalid(form)
 
     def form_valid(self, form):
-        form.save()
-        context = {}
-        context['form'] = form
-
-        return render(self.request, self.template_name, context)
+        form.instance.owner = self.request.user
+        form.morpheme_type.id = None
+        return super(MorphemeMainCreateView, self).form_valid(form)
 
 
 # --- Bootstrap Search Result
@@ -47,10 +40,41 @@ class SentenceAnalyzeLV(ListView):
         morpheme_type = '%s' % self.request.GET['morpheme_type']
         sentence = '%s' % self.request.GET['raw_sentence']
 
-        morpheme_object = Morpheme.morpheme_init(morpheme_type)
+        t1 = time.time()
+        process = psutil.Process(os.getpid())
+        before_mem = process.memory_info().rss / 1024 / 1024
+
+        for proc in psutil.process_iter():
+            if proc.name() == "python.exe":
+                print("before : ", proc)
+
+        morpheme = Morpheme()
+        morpheme_object = morpheme.morpheme_init(morpheme_type)
         result_sentence = morpheme_object.pos(sentence)
 
-        return JsonResponse(self.get_data(morpheme_type, result_sentence), json_dumps_params={'ensure_ascii': True})
+        after_mem = process.memory_info().rss / 1024 / 1024
+        t2 = time.time()
+        tot_time = t2 - t1
+
+        for proc in psutil.process_iter():
+            if proc.name() == "python.exe":
+                print("after : ", proc)
+
+        del morpheme
+        jpype.java.lang.System.gc()
+        gc.collect()
+
+        print('사용 전 메모리 {} MB'.format(before_mem))
+        print('실행 후 메모리 {} MB'.format(after_mem))
+        print('총 수행 시간 {:.5f}'.format(tot_time))
+
+        context = {}
+        context['result_sentence'] = list(result_sentence)
+        context['morpheme_type'] = morpheme_type
+        context['after_mem'] = after_mem
+        context['tot_time'] = tot_time
+
+        return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
 
     @staticmethod
     def get_data(morpheme_type, result_sentence):
@@ -64,13 +88,14 @@ class FileAnalyzeLV(ListView):
     template_name = 'morpheme/morpheme_list.html'
 
     def post(self, request):
-        file_morpheme_type = '%s' % self.request.POST.get('file_morpheme_type')
+        file_morpheme_type = '%s' % self.request.POST.get('morpheme_type')
         filename = request.FILES['csv_file'].read()
 
         data_frame = pandas.read_csv(io.BytesIO(filename))
         morpheme_object = Morpheme.morpheme_init(file_morpheme_type)
         morpheme_list = Morpheme.pos_list(morpheme_object, data_frame)
         del morpheme_object
+        jpype.java.lang.System.gc()
         return JsonResponse(self.get_data(file_morpheme_type, morpheme_list))
 
     @staticmethod

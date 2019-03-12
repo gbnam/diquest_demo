@@ -7,7 +7,7 @@ app_name = 'morpheme'
 
 urlpatterns = [
     # ex : /morpheme/, parameter : context path, view name, view role
-    path('', MainFormView.as_view(), name='index'),
+    path('', MorphemeMainCreateView.as_view(), name='morpheme_index'),
 
     path('sentence/', SentenceAnalyzeLV.as_view(), name='get'),
 

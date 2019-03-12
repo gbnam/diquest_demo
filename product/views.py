@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 
-from .models import Product
 from core.views import OwnerRequiredMixin
+from .models import Product
 
 
 class ProductLV(ListView):

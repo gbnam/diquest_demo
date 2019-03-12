@@ -19,15 +19,13 @@ class SentenceForm(forms.Form):
                                       widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
 
-class FileForm(forms.ModelForm):
+class MorphemeAnalysisForm(forms.ModelForm):
     class Meta:
-        model = CsvDocument
-        fields = ['file_morpheme_type','file']
+        model = MorphemeAnalysisModel
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
-        super(FileForm, self).__init__(*args, **kwargs)
-        self.fields['file'].required = True
-
-
-class MorphemeForm(SentenceForm, FileForm):
-    pass
+        super(MorphemeAnalysisForm, self).__init__(*args, **kwargs)
+        self.fields['morpheme_type'].widget = forms.Select(choices=morpheme_lists, attrs={'id': '', 'required': 'required'})
+        self.fields['raw_sentence'].widget = forms.TextInput(attrs={'required': 'required'})
+        self.fields['file'].required = 'required'

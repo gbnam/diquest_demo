@@ -1,21 +1,34 @@
-from django.contrib.auth.forms import UserCreationForm
+from .form import UserRegisterForm
 from django.urls import reverse_lazy
 from django.views.defaults import permission_denied
 from django.views.generic import CreateView
 from django.views.generic import TemplateView
 
 
+class PasswordContextMixin:
+    extra_context = None
 
-#--- TemplateView
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            # 'title': self.title,
+            **(self.extra_context or {})
+        })
+        return context
+
+# --- TemplateView
 class HomeView(TemplateView):
     template_name = 'home.html'
 
 
-#--- User Creation
-class UserCreateView(CreateView):
+# --- User Creation
+class UserCreateView(PasswordContextMixin, CreateView):
     template_name = 'registration/register.html'
-    form_class = UserCreationForm
+    form_class = UserRegisterForm
     success_url = reverse_lazy('register_done')
+
+    def form_valid(self, form):
+        return super(UserCreateView, self).form_valid(form)
 
 
 class UserCreateDoneTV(TemplateView):

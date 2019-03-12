@@ -37,4 +37,6 @@ urlpatterns = [
     path('morpheme/', include('morpheme.urls')),
     path('ml/', include('ml.urls')),
 
+    path('accounts/register/add/', UserCreateDoneTV.as_view(), name='register_add')
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

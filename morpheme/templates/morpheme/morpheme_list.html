@@ -10,7 +10,7 @@
         <h1>Morpheme Analysis</h1>
 
         <hr style="margin:0 0 20px 0;">
-        <div class="load_spinner_class">
+        <div>
             <div class="row">
                 <!-- NEW WIDGET START -->
                 <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
@@ -32,7 +32,7 @@
                             <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
                         <!-- widget div-->
-                        <div role="content">
+                        <div role="content" class="load_spinner_class">
 
                             <!-- widget edit box -->
                             <div class="jarviswidget-editbox">
@@ -111,86 +111,7 @@
                                                                 <i class="fa fa-info"></i> 아래 입력창에서 <strong>형태소
                                                                 분석엔진</strong>을 선택하고 문장을 입력해주세요.
                                                             </p>
-
                                                             {% include 'morpheme/sentence_form.html' %}
-
-                                                            <!-- row -->
-                                                            <div class="row">
-
-                                                                <div class="col-md-12">
-                                                                    <p>
-                                                                        Add any of the below mentioned modifier classes
-                                                                        to
-                                                                        change the appearance of a label.
-                                                                    </p>
-
-                                                                    <table class="table table-bordered">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th style="width:50%">Classes</th>
-                                                                            <th style="width:50%">Labels</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-default
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-default">Default</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-primary
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-primary">Primary</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-success
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-success">Success</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-info
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-info">Info</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-warning
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-warning">Warning</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-danger
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-danger">Danger</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
                                                         </div>
                                                         <!-- end col -->
                                                     </div>
@@ -222,151 +143,6 @@
                                                                 분석엔진</strong>을 선택하고 파일을 업로드 해주세요.
                                                             </p>
                                                             {% include 'morpheme/file_form.html' %}
-                                                            <!-- row -->
-                                                            <div class="row">
-
-                                                                <div class="col-md-6">
-                                                                    <p>
-                                                                        Add any of the below mentioned modifier classes
-                                                                        to
-                                                                        change the appearance of a label.
-                                                                    </p>
-
-                                                                    <table class="table table-bordered">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th style="width:50%">Classes</th>
-                                                                            <th style="width:50%">Labels</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-default
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-default">Default</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-primary
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-primary">Primary</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-success
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-success">Success</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-info
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-info">Info</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-warning
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-warning">Warning</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .label-danger
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="label label-danger">Danger</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <p>
-                                                                        Add any of the below mentioned modifier classes
-                                                                        to
-                                                                        change the appearance of a badge.
-                                                                    </p>
-                                                                    <table class="table table-bordered">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th style="width:50%">Classes</th>
-                                                                            <th style="width:50%">Badges</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>No modifiers</td>
-                                                                            <td><span class="badge">42</span></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .bg-color-darken
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="badge bg-color-darken">1</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .bg-color-greenLight
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="badge bg-color-greenLight">22</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .bg-color-blueLight
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="badge bg-color-blueLight">30</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .bg-color-orange
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="badge bg-color-orange">412</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <code>
-                                                                                    .bg-color-red
-                                                                                </code></td>
-                                                                            <td><span
-                                                                                    class="badge bg-color-red">999</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-
-                                                            </div>
-                                                            <!-- end row -->
                                                         </div>
                                                         <!-- end col -->
                                                     </div>
