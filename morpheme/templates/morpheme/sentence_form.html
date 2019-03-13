@@ -37,7 +37,6 @@
     </form>
 
     <script type="text/javascript">
-        {#document.getElementById('id_title').focus();#}
         $(document).ready(function () {
 
             $("input[name='raw_sentence']").on("keyup", function (event) {
@@ -71,9 +70,12 @@
                         $('.load_spinner_class *').prop('disabled', true);
                     }
                     , success: function (json) {
-                        var morpheme_type_str = JSON.stringify(json.morpheme_type);
+                        const morpheme_type_str = JSON.stringify(json.morpheme_type);
+                        const total_memory_str = JSON.stringify(json.total_memory);
+                        const user_name_str = JSON.stringify(json.user_name);
+                        const total_time_str = JSON.stringify(json.total_time);
 
-                        $("#result_info").html('<p><strong>' + morpheme_type_str + ' 분석결과 </strong></p>');
+                        $("#result_info").html('<p><strong>' + morpheme_type_str + ' 분석결과 : '+total_memory_str+'MB사용 / '+total_time_str+'(초) by '+user_name_str+'</strong></p>');
                         for (var i = 0; i < json.result_sentence.length; i++) {
                             var result_list = json.result_sentence[i];
                             var keyword = result_list[0];

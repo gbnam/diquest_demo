@@ -29,3 +29,10 @@ class MorphemeAnalysisForm(forms.ModelForm):
         self.fields['morpheme_type'].widget = forms.Select(choices=morpheme_lists, attrs={'id': '', 'required': 'required'})
         self.fields['raw_sentence'].widget = forms.TextInput(attrs={'required': 'required'})
         self.fields['file'].required = 'required'
+
+    def save(self, commit=True):
+        morpheme = super().save(commit=False)
+        print(morpheme, " : ", commit)
+        if commit:
+            morpheme.save()
+        return morpheme

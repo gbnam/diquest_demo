@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.text import slugify
 from konlpy.tag import *
+import uuid
 
 morpheme_lists = (
     ('', u'선택'),
@@ -14,10 +15,13 @@ morpheme_lists = (
     ('hannanum', u'hannanum')
 )
 
+date_input_format = ['%Y-%m-%d %H:%M:%S']
+
 
 class MorphemeAnalysisModel(models.Model):
+    auto_increment_id = models.AutoField(primary_key=True, default=uuid.uuid1)
     raw_sentence = models.CharField(max_length=300, verbose_name='원문 문장', name='raw_sentence')
-    slug = models.SlugField(unique=True, allow_unicode=True, help_text='one word for title alias.', name='slug')
+    slug = models.SlugField(unique=True, allow_unicode=True, help_text='one word for title alias.', name='slug', default=uuid.uuid1)
     morpheme_type = models.CharField(max_length=1, verbose_name='형태소분석기', choices=morpheme_lists, name='morpheme_type')
     file = models.FileField(
         upload_to='files/%Y/%m',
@@ -25,16 +29,22 @@ class MorphemeAnalysisModel(models.Model):
         default=None,
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(["CSV"], message="CSV 파일만 허용 가능")]
+        validators=[FileExtensionValidator(["csv"], message="CSV 파일만 허용 가능")]
     )
+
+    reg_date = models.DateTimeField(auto_now_add=True)
+
+    user_name = models.CharField(max_length=20)
 
     class Meta:
         verbose_name = 'analysis'
         db_table = 'morpheme_analysis'
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.slug = slugify(self.morpheme_type, allow_unicode=True)
+        if not self.auto_increment_id:
+            self.slug = slugify(self.slug, allow_unicode=True)
+        else:
+            self.auto_increment_id = MorphemeAnalysisModel.objects.count()
         super(MorphemeAnalysisModel, self).save(*args, **kwargs)
 
 
@@ -64,7 +74,6 @@ class Morpheme(models.Model):
         elif morpheme_type == 'jiana':
             # morpheme_object = Jiana()
             morpheme_object = Okt()
-        print(morpheme_object)
         return morpheme_object
 
     @staticmethod
