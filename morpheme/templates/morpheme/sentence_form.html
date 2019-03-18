@@ -31,7 +31,7 @@
                     <label for="id_parsed_sentence" class="col-sm-3 control-label">변환 문장</label>
                     <div class="col-sm-8">
                         <div class="alert alert-info" id="result_info">
-                            <li v-for='result in result_set'>
+                            <li v-for='result in result_set' v-text="result">
                                 {{ result }} - {{ index }} -
                             </li>
                             {{ result_set.morpheme_type }}
@@ -47,7 +47,7 @@
         let sentence_result = new Vue({
             el: '#sentence-result'
             , data: {
-                result_set: []
+                result_set: [1,2,3,4,5]
             },
             methods: {
                 sentence_analyze: function () {
