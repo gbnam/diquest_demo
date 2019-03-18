@@ -27,7 +27,7 @@ class MorphemeAnalysisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MorphemeAnalysisForm, self).__init__(*args, **kwargs)
         self.fields['morpheme_type'].widget = forms.Select(choices=morpheme_lists, attrs={'id': '', 'required': 'required'})
-        self.fields['raw_sentence'].widget = forms.TextInput(attrs={'required': 'required'})
+        self.fields['raw_sentence'].widget = forms.TextInput(attrs={'required': 'required', 'v-on:keyup.13':'sentence_analyze'})
         self.fields['file'].required = 'required'
 
     def save(self, commit=True):

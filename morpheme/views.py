@@ -42,9 +42,9 @@ class MorphemeMainCreateView(LoginRequiredMixin, CreateView):
 class SentenceAnalyzeLV(ListView):
     template_name = 'morpheme/morpheme_list.html'
 
-    def get(self, request):
-        morpheme_type = '%s' % self.request.GET['morpheme_type']
-        sentence = '%s' % self.request.GET['raw_sentence']
+    def post(self, request):
+        morpheme_type = '%s' % self.request.POST.get('morpheme_type')
+        sentence = '%s' % self.request.POST.get('raw_sentence')
         user_name = '{0}'.format(self.request.user)
 
         start_time = time.time()
