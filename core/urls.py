@@ -36,6 +36,7 @@ urlpatterns = [
     path('photo/', include('photo.urls')),
     path('morpheme/', include('morpheme.urls')),
     path('ml/', include('ml.urls')),
+    path('rtc/', include('rtc.urls')),
 
     path('accounts/register/add/', UserCreateDoneTV.as_view(), name='register_add')
 
